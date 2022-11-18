@@ -1,4 +1,4 @@
-package org.eMpTy;
+package org.empty.neuralnetwork;
 
 import static org.junit.Assert.assertTrue;
 

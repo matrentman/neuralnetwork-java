@@ -1,4 +1,4 @@
-package org.eMpTy;
+package org.empty.neuralnetwork;
 
 /**
  * Logic Gates
@@ -19,6 +19,7 @@ public class App
         }
         z += b;
 
+        // Activation function
         return z > 0 ? 1.0 : 0.0;
     }
 
