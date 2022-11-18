@@ -1,8 +1,12 @@
 package org.empty.neuralnetwork.matrix;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Matrix {
 
-    private static final String NUMBER_FORMAT = "%12.5f";
+    private static final String NUMBER_FORMAT = "%+12.5f";
+    private static final double TOLERANCE = 0.000001;
 
     private int rows;
     private int cols;
@@ -10,6 +14,11 @@ public class Matrix {
     public interface Producer {
         double produce(int index);
     }
+
+    public interface ValueProducer {
+        double produce(int index, double value);
+    }
+
     private double[] a;
 
     public Matrix(int rows, int cols) {
@@ -24,6 +33,43 @@ public class Matrix {
         for (int i = 0; i < a.length; i++) {
             a[i] = producer.produce(i);
         }
+    }
+
+    public Matrix apply(ValueProducer producer) {
+        Matrix result = new Matrix(rows, cols);
+
+        for (int i = 0; i < a.length; i++) {
+            result.a[i] = producer.produce(i, a[i]);
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Matrix matrix = (Matrix) o;
+
+        for (int i = 0; i < a.length; i++) {
+            if ((Math.abs(a[i] - matrix.a[i])) > TOLERANCE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public double get(int index) {
+        return a[index];
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(rows, cols);
+        result = 31 * result + Arrays.hashCode(a);
+
+        return result;
     }
 
     public String toString() {
